@@ -1,7 +1,8 @@
 SECTION .text
 	global main
 	extern printf
-	
+
+; define struct cmplx and create two example instances	
 SECTION .data
 	STRUC cmplx
 		.real RESD 1
@@ -18,6 +19,7 @@ SECTION .data
 		DD 3
 	IEND
 
+	; message for printf to print our result
 	message DB "Ergebnis = %i + i* %i", 10, 0
 
 main:
@@ -27,6 +29,7 @@ main:
 	imul eax, [cmplx_2+cmplx.real]
 	mov ebx, [cmplx_1+cmplx.imag]
 	imul ebx, [cmplx_2+cmplx.imag]
+	; stay real 
 	imul ebx, -1
 	add eax, ebx
 
@@ -38,12 +41,12 @@ main:
 	add ebx, ecx
 	
 	;Print Result
-	push ebx
-	push eax
-	push message
-	call printf
-	
+	push ebx ; third argument (imaginary part)
+	push eax ; second argument (real part)
+	push message ; first argument (message)
+	call printf ; call to C
 
+	; exit
 	mov ebx, 0
 	mov eax, 1
 	int 0x80
